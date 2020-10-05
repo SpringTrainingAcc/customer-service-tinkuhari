@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.customer.ms.dao.CustomerDAO;
 import com.customer.ms.model.Customer;
+import com.customer.ms.model.CustomerM;
+import com.customer.ms.service.CustomerService;
 
 @RestController
 public class CustomerController {
 	
 	@Autowired
 	private CustomerDAO customerDAO;
+	
+	@Autowired
+	private CustomerService customerService;
 	
 	@RequestMapping("/hello")
 	public String hello() {
@@ -46,15 +51,29 @@ public class CustomerController {
 //		if(customerDAO.getCustomer(cusId) == null) {
 //			return "No such customer exists";
 //		}
-		return customerDAO.deleteCustomer(cusId);
-		
+		return customerDAO.deleteCustomer(cusId);	
 	}
 	
 	@RequestMapping(value="/customers/{cusId}",method=RequestMethod.PUT,produces= {MediaType.APPLICATION_JSON_VALUE})
 	public String updateCustomer(@RequestBody Customer customer,@PathVariable("cusId") String cusId) {
-		
 		return customerDAO.updateCustomer(cusId,customer);
 		
 	}
+	
+	@RequestMapping(value="/mongoCustomers",method=RequestMethod.GET,produces= {MediaType.APPLICATION_JSON_VALUE})
+	public List<CustomerM> getAllCustomers(){
+		return customerService.findAll();
+	}
+	
+	@RequestMapping(value="/mongoCustomer/{cusId}",method=RequestMethod.GET,produces= {MediaType.APPLICATION_JSON_VALUE})
+	public CustomerM getMongoCustomer(@PathVariable("cusId") String cusId){
+		return customerService.findById(cusId);
+	}
+	
+	@RequestMapping(value="/mongoCustomer",method=RequestMethod.POST,produces= {MediaType.APPLICATION_JSON_VALUE})
+	public CustomerM addMongoCustomer(@RequestBody CustomerM customerm){
+		return customerService.addCustomer(customerm);
+	}
+	
 	
 }

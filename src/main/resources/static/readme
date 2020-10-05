@@ -1,0 +1,4 @@
+mongodb+srv://<username>:<password>@cluster0.aui5d.mongodb.net/<dbname>?retryWrites=true&w=majority
+
+springDB
+admin
